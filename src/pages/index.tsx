@@ -1,7 +1,9 @@
 import { GetServerSideProps } from "next";
+import { BlogInfo } from "@/types/BlogInfo";
+import { BlogCard } from "@/components/BlogCard";
 import Head from "next/head";
 
-export default function Home() {
+export default function Home({ blogs }: { blogs: BlogInfo[] }) {
   return (
     <>
       <Head>
@@ -9,8 +11,22 @@ export default function Home() {
         <meta name="description" content="記事一覧ページです。" />
       </Head>
 
-      {/* 今後のIssueでここにレイアウトやBlogCardコンポーネントを追加していきます */}
-      <h1>ブログ記事一覧</h1>
+      <section className="space-y-4">
+        <h1 className="text-2xl font-bold mb-6">ブログ記事一覧</h1>
+
+        <ul className="space-y-4">
+          {blogs.map((blog) => (
+            <li key={blog.id}>
+              <BlogCard
+                id={blog.id}
+                title={blog.title}
+                userName={blog.userName}
+                userImage={blog.userImage}
+              />
+            </li>
+          ))}
+        </ul>
+      </section>
     </>
   );
 }
@@ -25,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       throw new Error(`API Error: ${res.status} ${res.statusText}`);
     }
 
-    const blogs = await res.json();
+    const blogs: BlogInfo[] = await res.json();
 
     return {
       props: {
