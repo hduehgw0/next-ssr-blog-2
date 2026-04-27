@@ -8,6 +8,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const res = await fetch(`${API_BASE_URL}/${id}`);
 
+    if (res.status === 404) {
+      return { notFound: true };
+    }
+
+    if (!res.ok) {
+      throw new Error(`API Error: ${res.status}`);
+    }
+
     const blog = await res.json();
 
     return {
