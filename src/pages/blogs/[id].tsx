@@ -26,7 +26,7 @@ export default function BlogDetailPage({ blog }: { blog: BlogDetail }) {
           </address>
         </header>
 
-        <section className="bg-gray-50 p-6 rounded-md border text-gray-800">
+        <section className="bg-gray-50 p-6 rounded-md border text-gray-800 prose prose-slate max-w-none">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {blog.content}
           </ReactMarkdown>
