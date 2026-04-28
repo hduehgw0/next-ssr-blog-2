@@ -1,24 +1,35 @@
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import { BlogDetail } from "@/types/BlogDetail";
 import { AuthorInfo } from "@/components/AuthorInfo";
 
 export default function BlogDetailPage({ blog }: { blog: BlogDetail }) {
   return (
-    <article className="max-w-3xl mx-auto py-8">
-      <header>
-        <h1 className="text-3xl font-bold mb-6">{blog.title}</h1>
+    <>
+      <Head>
+        <title>Algo Blog | {blog.title}</title>
+        <meta
+          name="description"
+          content={`${blog.userName}による記事の詳細ページです。`}
+        />
+      </Head>
 
-        <address className="mb-8">
-          <AuthorInfo userName={blog.userName} userImage={blog.userImage} />
-        </address>
-      </header>
+      <article className="max-w-3xl mx-auto py-8">
+        <header>
+          <h1 className="text-3xl font-bold mb-6">{blog.title}</h1>
 
-      <section className="bg-gray-50 p-6 rounded-md border">
-        <div className="whitespace-pre-wrap text-gray-800">
-          {blog.content}
-        </div>
-      </section>
-    </article>
+          <address className="mb-8">
+            <AuthorInfo userName={blog.userName} userImage={blog.userImage} />
+          </address>
+        </header>
+
+        <section className="bg-gray-50 p-6 rounded-md border">
+          <div className="whitespace-pre-wrap text-gray-800">
+            {blog.content}
+          </div>
+        </section>
+      </article>
+    </>
   );
 }
 
