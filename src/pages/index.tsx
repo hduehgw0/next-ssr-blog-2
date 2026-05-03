@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { GetServerSideProps } from "next";
 import { BlogInfo } from "@/types/BlogInfo";
 import { BlogCard } from "@/components/BlogCard";
@@ -5,6 +6,10 @@ import { API_BASE_URL } from "@/lib/constants";
 import Head from "next/head";
 
 export default function Home({ blogs }: { blogs: BlogInfo[] }) {
+
+  const [visibleCount, setVisibleCount] = useState<number>(10);
+  const visibleBlogs = blogs.slice(0, visibleCount);
+
   return (
     <>
       <Head>
@@ -21,7 +26,7 @@ export default function Home({ blogs }: { blogs: BlogInfo[] }) {
         </h1>
 
         <ul className="space-y-4 md:space-y-6">
-          {blogs.map((blog) => (
+          {visibleBlogs.map((blog) => (
             <li key={blog.id}>
               <BlogCard
                 id={blog.id}
