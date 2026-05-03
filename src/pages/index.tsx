@@ -48,7 +48,12 @@ export default function Home({ blogs }: { blogs: BlogInfo[] }) {
 
         {visibleCount < blogs.length && (
           <div className="mt-8 flex justify-center">
-            <Button onClick={handleLoadMore}>
+            <Button
+              variant="outline"
+              size="lg"
+              className="w-full sm:w-64 rounded-full"
+              onClick={handleLoadMore}
+            >
               もっと読む
             </Button>
           </div>
