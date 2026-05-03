@@ -52,6 +52,7 @@ export default function Home({ blogs }: { blogs: BlogInfo[] }) {
               variant="outline"
               size="lg"
               className="w-full sm:w-64 rounded-full"
+              aria-label="さらに記事を読み込む"
               onClick={handleLoadMore}
             >
               もっと読む
