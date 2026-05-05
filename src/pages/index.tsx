@@ -16,7 +16,14 @@ export default function Home({ blogs }: { blogs: BlogInfo[] }) {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const visibleBlogs = blogs.slice(0, visibleCount);
+  const filteredBlogs = blogs.filter((blog) => {
+    const lowerQuery = searchQuery.toLowerCase();
+    return (
+      blog.title.toLowerCase().includes(lowerQuery)
+    );
+  });
+
+  const visibleBlogs = filteredBlogs.slice(0, visibleCount);
 
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + BLOGS_PER_LOAD);
@@ -59,7 +66,7 @@ export default function Home({ blogs }: { blogs: BlogInfo[] }) {
           ))}
         </ul>
 
-        {visibleCount < blogs.length && (
+        {visibleCount < filteredBlogs.length && (
           <div className="mt-8 flex justify-center">
             <Button
               variant="outline"
