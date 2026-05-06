@@ -16,11 +16,15 @@ export default function Home({ blogs }: { blogs: BlogInfo[] }) {
 
   const [searchQuery, setSearchQuery] = useState("");
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    setVisibleCount(INITIAL_BLOGS_TO_SHOW);
+  };
+
   const filteredBlogs = blogs.filter((blog) => {
     const lowerQuery = searchQuery.toLowerCase();
-    return (
-      blog.title.toLowerCase().includes(lowerQuery)
-    );
+    return blog.title.toLowerCase().includes(lowerQuery);
   });
 
   const visibleBlogs = filteredBlogs.slice(0, visibleCount);
@@ -49,7 +53,7 @@ export default function Home({ blogs }: { blogs: BlogInfo[] }) {
             type="search"
             placeholder="記事を検索..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchChange}
           />
         </div>
 
