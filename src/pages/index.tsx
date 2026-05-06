@@ -58,7 +58,7 @@ export default function Home({ blogs }: { blogs: BlogInfo[] }) {
         </div>
 
         {filteredBlogs.length === 0 ? (
-          <p className="text-center text-gray-500 py-10">
+          <p className="text-center text-gray-500 py-10" role="status">
             「{searchQuery}」に一致する記事は見つかりませんでした。
           </p>
         ) : (
