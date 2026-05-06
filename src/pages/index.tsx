@@ -23,7 +23,10 @@ export default function Home({ blogs }: { blogs: BlogInfo[] }) {
   };
 
   const filteredBlogs = blogs.filter((blog) => {
-    const lowerQuery = searchQuery.toLowerCase();
+    const lowerQuery = searchQuery.trim().toLowerCase();
+
+    if (!lowerQuery) return true;
+
     return blog.title.toLowerCase().includes(lowerQuery);
   });
 
