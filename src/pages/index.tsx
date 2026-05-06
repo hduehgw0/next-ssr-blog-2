@@ -57,18 +57,24 @@ export default function Home({ blogs }: { blogs: BlogInfo[] }) {
           />
         </div>
 
-        <ul className="space-y-4 md:space-y-6">
-          {visibleBlogs.map((blog) => (
-            <li key={blog.id}>
-              <BlogCard
-                id={blog.id}
-                title={blog.title}
-                userName={blog.userName}
-                userImage={blog.userImage}
-              />
-            </li>
-          ))}
-        </ul>
+        {filteredBlogs.length === 0 ? (
+          <p className="text-center text-gray-500 py-10">
+            「{searchQuery}」に一致する記事は見つかりませんでした。
+          </p>
+        ) : (
+          <ul className="space-y-4 md:space-y-6">
+            {visibleBlogs.map((blog) => (
+              <li key={blog.id}>
+                <BlogCard
+                  id={blog.id}
+                  title={blog.title}
+                  userName={blog.userName}
+                  userImage={blog.userImage}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
 
         {visibleCount < filteredBlogs.length && (
           <div className="mt-8 flex justify-center">
