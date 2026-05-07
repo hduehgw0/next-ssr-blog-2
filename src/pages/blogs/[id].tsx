@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { BlogDetail } from "@/types/BlogDetail";
@@ -7,6 +8,9 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 export default function BlogDetailPage({ blog }: { blog: BlogDetail }) {
+  const [likeCount, setLikeCount] = useState<number>(0);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+
   return (
     <>
       <Head>
