@@ -4,8 +4,8 @@ import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function LikeButton() {
-  const [likeCount, setLikeCount] = useState<number>(0);
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
 
   const handleToggleLike = () => {
     if (isLiked) {
