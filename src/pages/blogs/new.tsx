@@ -28,6 +28,18 @@ export default function CreateBlogPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const result = blogSchema.safeParse(formData);
+
+    if (!result.success) {
+      console.log("バリデーションエラー:", z.treeifyError(result.error));
+      return;
+    }
+
+    console.log("バリデーション成功！送信予定データ:", result.data);
+  };
+
   return (
     <>
       <Head>
@@ -38,7 +50,7 @@ export default function CreateBlogPage() {
         <h1 className="text-3xl font-bold mb-8">記事を投稿する</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <form className="space-y-6 flex flex-col">
+          <form onSubmit={handleSubmit} className="space-y-6 flex flex-col">
             <div>
               <label htmlFor="title" className="sr-only">
                 記事のタイトル
