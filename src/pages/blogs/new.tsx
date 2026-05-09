@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
+import { API_BASE_URL } from "@/lib/constants";
 
 const blogSchema = z.object({
   title: z.string().min(1, "タイトルは必須です"),
@@ -26,6 +27,7 @@ export default function CreateBlogPage() {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -38,8 +40,9 @@ export default function CreateBlogPage() {
     }
   };
 
-  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const result = blogSchema.safeParse(formData);
 
     if (!result.success) {
@@ -51,7 +54,27 @@ export default function CreateBlogPage() {
       return;
     }
 
-    console.log("バリデーション成功！送信予定データ:", result.data);
+    setIsSubmitting(true);
+
+    try {
+      const res = await fetch(API_BASE_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(result.data),
+      });
+
+      if (!res.ok) {
+        throw new Error("投稿に失敗しました");
+      }
+
+      console.log("POSTリクエスト成功！");
+    } catch (error) {
+      console.error(error);
+      alert("エラーが発生しました。時間をおいて再度お試しください。");
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -134,7 +157,15 @@ export default function CreateBlogPage() {
                 <p className="text-red-500 text-sm mt-1">{errors.content}</p>
               )}
             </div>
-            <Button className="w-full text-lg py-6">投稿</Button>
+
+            <Button
+              type="submit"
+              className="w-full text-lg py-6"
+              disabled={isSubmitting}
+              aria-busy={isSubmitting}
+            >
+              {isSubmitting ? "投稿中..." : "投稿"}
+            </Button>
           </form>
 
           <section className="hidden lg:block bg-gray-50 border rounded-md p-8 overflow-y-auto max-h-[800px]">
