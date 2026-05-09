@@ -13,6 +13,10 @@ const blogSchema = z.object({
   userImage: z.url("正しいURL形式で入力してください"),
 });
 
+type FormErrors = {
+  [K in keyof z.infer<typeof blogSchema>]?: string;
+};
+
 export default function CreateBlogPage() {
   const [formData, setFormData] = useState({
     title: "",
@@ -21,11 +25,17 @@ export default function CreateBlogPage() {
     content: "",
   });
 
+  const [errors, setErrors] = useState<FormErrors>({});
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name as keyof FormErrors]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -33,7 +43,11 @@ export default function CreateBlogPage() {
     const result = blogSchema.safeParse(formData);
 
     if (!result.success) {
-      console.log("バリデーションエラー:", z.treeifyError(result.error));
+      const formattedErrors: FormErrors = {};
+      result.error.issues.forEach((issue) => {
+        formattedErrors[issue.path[0] as keyof FormErrors] = issue.message;
+      });
+      setErrors(formattedErrors);
       return;
     }
 
@@ -51,7 +65,7 @@ export default function CreateBlogPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <form onSubmit={handleSubmit} className="space-y-6 flex flex-col">
-            <div>
+            <div className="flex flex-col gap-2">
               <label htmlFor="title" className="sr-only">
                 記事のタイトル
               </label>
@@ -63,9 +77,13 @@ export default function CreateBlogPage() {
                 placeholder="記事のタイトル"
                 className="text-lg font-bold"
               />
+              {errors.title && (
+                <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+              )}
             </div>
+
             <div className="grid grid-cols-2 gap-4">
-              <div>
+              <div className="flex flex-col gap-2">
                 <label htmlFor="userName" className="sr-only">
                   投稿者名
                 </label>
@@ -76,8 +94,12 @@ export default function CreateBlogPage() {
                   onChange={handleChange}
                   placeholder="投稿者名"
                 />
+                {errors.userName && (
+                  <p className="text-red-500 text-sm mt-1">{errors.userName}</p>
+                )}
               </div>
-              <div>
+
+              <div className="flex flex-col gap-2">
                 <label htmlFor="userImage" className="sr-only">
                   プロフィール画像URL
                 </label>
@@ -88,9 +110,15 @@ export default function CreateBlogPage() {
                   onChange={handleChange}
                   placeholder="プロフィール画像URL"
                 />
+                {errors.userImage && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.userImage}
+                  </p>
+                )}
               </div>
             </div>
-            <div className="flex-grow flex flex-col">
+
+            <div className="flex-grow flex flex-col h-full gap-2">
               <label htmlFor="content" className="sr-only">
                 本文
               </label>
@@ -102,6 +130,9 @@ export default function CreateBlogPage() {
                 placeholder="マークダウンで本文を記述..."
                 className="flex-grow min-h-[400px] w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
               />
+              {errors.content && (
+                <p className="text-red-500 text-sm mt-1">{errors.content}</p>
+              )}
             </div>
             <Button className="w-full text-lg py-6">投稿</Button>
           </form>
