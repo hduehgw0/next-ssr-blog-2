@@ -1,10 +1,23 @@
+import { useState } from "react";
 import { GetServerSideProps } from "next";
 import { BlogInfo } from "@/types/BlogInfo";
 import { BlogCard } from "@/components/BlogCard";
 import { API_BASE_URL } from "@/lib/constants";
+import { Button } from "@/components/ui/button";
 import Head from "next/head";
 
+const INITIAL_BLOGS_TO_SHOW = 10;
+const BLOGS_PER_LOAD = 10;
+
 export default function Home({ blogs }: { blogs: BlogInfo[] }) {
+
+  const [visibleCount, setVisibleCount] = useState<number>(INITIAL_BLOGS_TO_SHOW);
+  const visibleBlogs = blogs.slice(0, visibleCount);
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + BLOGS_PER_LOAD);
+  };
+
   return (
     <>
       <Head>
@@ -21,7 +34,7 @@ export default function Home({ blogs }: { blogs: BlogInfo[] }) {
         </h1>
 
         <ul className="space-y-4 md:space-y-6">
-          {blogs.map((blog) => (
+          {visibleBlogs.map((blog) => (
             <li key={blog.id}>
               <BlogCard
                 id={blog.id}
@@ -32,6 +45,20 @@ export default function Home({ blogs }: { blogs: BlogInfo[] }) {
             </li>
           ))}
         </ul>
+
+        {visibleCount < blogs.length && (
+          <div className="mt-8 flex justify-center">
+            <Button
+              variant="outline"
+              size="lg"
+              className="w-full sm:w-64 rounded-full"
+              aria-label="さらに記事を読み込む"
+              onClick={handleLoadMore}
+            >
+              もっと読む
+            </Button>
+          </div>
+        )}
       </section>
     </>
   );
