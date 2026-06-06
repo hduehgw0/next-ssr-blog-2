@@ -2,6 +2,7 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { BlogDetail } from "@/types/BlogDetail";
 import { AuthorInfo } from "@/components/AuthorInfo";
+import { LikeButton } from "@/components/LikeButton";
 import { API_BASE_URL } from "@/lib/constants";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -23,9 +24,13 @@ export default function BlogDetailPage({ blog }: { blog: BlogDetail }) {
             {blog.title}
           </h1>
 
-          <address className="mb-6 md:mb-8" aria-label="記事の著者情報">
-            <AuthorInfo userName={blog.userName} userImage={blog.userImage} />
-          </address>
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6 md:mb-8">
+            <address aria-label="記事の著者情報">
+              <AuthorInfo userName={blog.userName} userImage={blog.userImage} />
+            </address>
+
+            <LikeButton />
+          </div>
         </header>
 
         <section
