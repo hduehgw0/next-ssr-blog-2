@@ -12,7 +12,7 @@ export function Header() {
         </Link>
         <Link
           href="/blogs/new"
-          className="text-sm font-medium text-gray-600 transition-colors hover:text-gray-900"
+          className="flex items-center self-stretch border-x border-gray-300 px-6 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-50"
         >
           新規投稿
         </Link>
