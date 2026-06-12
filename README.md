@@ -1,4 +1,4 @@
-# next-ssr-blog-2
+# next-ssr-blogs
 
 アルゴ式 BootCamp 「Next.js① SSR」セクションで作成する、SSR（サーバーサイドレンダリング）を最大限に活用した Qiita ライクなブログサイトです。
 
